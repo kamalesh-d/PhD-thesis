@@ -1,0 +1,36 @@
+DL_POLY: SPC water model
+UNITS eV
+MOLECULES 3
+SPC water
+NUMMOLS 175         #number_of_water_in_glass
+ATOMS 3
+O            16.0000        0.00d0    1    0    1
+H             1.0008        0.00d0    2    0    1
+FINISH
+Silicium
+NUMMOLS 130 
+ATOMS 1
+Si         28.085       0.00d0
+FINISH
+Oxygène
+NUMMOLS 260 
+ATOMS 1
+O          15.999       0.00d0
+FINISH
+VDW 6
+Si Si    tab
+Si O     tab
+Si H     tab
+O  O     tab   
+O  H     tab
+H  H     tab
+TBP 4
+Si    O    Si   stwb   6.17978E+00    -3.33331E-01    2.00000E+00    2.00000E+00    2.60000E+00
+O     Si   O    stwb   0.93009E+02    -3.33331E-01    2.80000E+00    2.80000E+00    3.00000E+00
+H     O    H    stwb   1.87266E+02    -1.73650E-01    1.30000E+00    1.30000E+00    1.60000E+00
+Si    O    H    stw1   1.32335E+02    -3.33331E-01    2.00000E+00    1.30000E+00    2.60000E+00   1.60000E+00
+CLOSE
+
+RIGID BODIES 1
+    3    1    2    3
+

@@ -1,0 +1,130 @@
+#!/bin/sh
+
+### All calculation parameters go here ###
+CUWOD_SS4='/home/kd261704/Kamalesh/CEA/my_project/md_simulation/simulations/silicate_glass/5/glass'
+
+### Calculation initialization ###
+cd $CUWOD_SS4
+rm -f OUTPUT* HISTORY* RDFDAT* REVCON* REVIVE STATIS output_res
+#cp CONFIG_SIO2_H2O_P1 CONFIG
+
+
+### Do initial stage (relaxation initiale avec un pas de temps plus petit) ###
+cp TEMP_init CONTROL
+echo "Running the simulation, Stage initial"
+./DLPOLY.Y
+until [ $(grep -s "terminating" OUTPUT | wc | awk '{print $1}') -eq 1 ]
+	do
+		sleep 60
+	done
+cp REVCON CONFIG
+mv OUTPUT OUTPUT_init
+mv RDFDAT RDFDAT_init
+mv REVCON REVCON_init
+mv HISTORY HISTORY_init
+#rm output_res HISTORY
+echo '========================= DONE STAGE initial ========================='
+
+
+STEMP_SS4='4000'
+NSTEPS_SS4='38'
+
+
+### Calculation initialization ###
+cd $CUWOD_SS4
+
+
+### Do PR stage ###
+#cp TEMP_PR CONTROL
+#echo "Running the simulation, Stage PR"
+#./mpoly
+#until [ $(grep -s "terminating" OUTPUT | wc | awk '{print $1}') -eq 1 ]
+#	do
+#		sleep 60
+#	done
+#cp REVCON CONFIG
+#mv OUTPUT OUTPUT_PR
+#mv RDFDAT RDFDAT_PR
+#mv REVCON REVCON_PR
+#rm output_res HISTORY
+#echo '========================= DONE STAGE PR ========================='
+
+
+### Do V1 stage ###
+cp TEMP_V1 CONTROL
+echo "Running the simulation, Stage V1"
+./DLPOLY.Y
+until [ $(grep -s "terminating" OUTPUT | wc | awk '{print $1}') -eq 1 ]
+	do
+		sleep 60
+	done
+cp REVCON CONFIG
+mv OUTPUT OUTPUT_V1
+mv RDFDAT RDFDAT_V1
+mv REVCON REVCON_V1
+mv HISTORY HISTORY_V1
+#rm output_res HISTORY
+echo '========================= DONE STAGE V1 ========================='
+
+
+### Do V2 stage ###
+cp TEMP_V2 CONTROL
+S_SS4=1
+while [ $S_SS4 -le $NSTEPS_SS4 ]
+do
+	echo '>>>>>>>>>>>>>>>>>>>>>>>>> DAMPING: TEMP=' $STEMP_SS4
+        sed -e "s/CHTEMP/$STEMP_SS4/" TEMP_V2 > CONTROL
+        echo "Running the simulation, Stage V2, Temp=$STEMP_SS4..."
+./DLPOLY.Y
+	until [ $(grep -s "terminating" OUTPUT | wc | awk '{print $1}') -eq 1 ]
+       	do
+               	sleep 60
+       	done
+        cp REVCON CONFIG
+        mv REVCON REVCON_V2_$STEMP_SS4
+        mv OUTPUT OUTPUT_V2_$STEMP_SS4
+        mv RDFDAT RDFDAT_V2_$STEMP_SS4
+        mv HISTORY HISTORY_V2_$STEMP_SS4
+#       rm output_res HISTORY
+        S_SS4=`expr $S_SS4 + 1`
+        STEMP_SS4=`expr $STEMP_SS4 - 100`
+done
+# tar -cvfz DAMPING_FILES.tar.gz *_V2_* 
+echo '========================= DONE STAGE V2 ========================='
+
+
+### Do V3 stage ###
+cp TEMP_V3 CONTROL
+echo "Running the simulation, Stage V3"
+./DLPOLY.Y
+until [ $(grep -s "terminating" OUTPUT | wc | awk '{print $1}') -eq 1 ]
+        do
+                sleep 60
+        done
+cp REVCON CONFIG
+mv OUTPUT OUTPUT_V3
+mv RDFDAT RDFDAT_V3
+mv REVCON REVCON_V3
+mv HISTORY HISTORY_V3
+#rm output_res HISTORY
+echo '========================= DONE STAGE V3 ========================='
+
+
+### Do V4 stage ###
+cp TEMP_V4 CONTROL
+echo "Running the simulation, Stage V4"
+./DLPOLY.Y
+until [ $(grep -s "terminating" OUTPUT | wc | awk '{print $1}') -eq 1 ]
+        do
+                sleep 60
+        done
+cp REVCON CONFIG
+mv OUTPUT OUTPUT_V4
+mv RDFDAT RDFDAT_V4
+mv REVCON REVCON_V4
+mv HISTORY HISTORY_V4
+#rm output_res HISTORY
+echo '========================= DONE STAGE V4 ========================='
+
+exit 0
+

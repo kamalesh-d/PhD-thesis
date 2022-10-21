@@ -1,0 +1,29 @@
+V2 run
+
+integrator leapfrog verlet
+
+ensemble nvt hoover 0.5 
+temp             CHTEMP
+pres		 0.001
+ 
+
+steps            20000
+equilibration    10000
+traj             0  5000  2
+scale            10
+print            10
+stack            10
+stats every	 20000
+rdf              1000
+timestep         0.001
+cutoff           8.0
+rvdw cutoff      8.0
+ewald precision  1.0E-5
+
+print rdf
+
+job time         172800000.0
+close time       500000.00
+
+finish 
+

@@ -1,0 +1,33 @@
+PMF
+
+no strict
+delr              0.2000E+00
+
+temperature       3.0000E+02
+pressure          0.0000E+00
+
+ensemble pmf
+steps             15000
+equilibration     1500
+traj           0    15000   2
+multiple          1
+scale             10
+print             10
+stack             100
+stats every       1000
+rdf               1
+
+timestep          0.0001
+primary           8.0000E+00
+cutoff            8.0
+rvdw              8.0
+ewald precision   1.0000E-05
+shake tolerance   1.0000E-08
+quaternion tolerance  1.0000E-05
+print rdf
+
+job time          9.0000E+05
+close time        2.0000E+01
+
+finish
+

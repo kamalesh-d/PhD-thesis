@@ -1,0 +1,28 @@
+SPC model water in cubic cell
+temperature             3.0000E+02
+pressure                0.0000E+00
+ensemble nvt hoover 0.1
+
+steps                   100000
+equilibration           50000
+traj                    0  25000  2
+multiple                1
+scale                   10
+print                   100
+stack                   100
+stats                   100
+rdf                     10
+timestep                5.0000E-04
+primary                 7.6000E+00
+cutoff                  7.0000E+00
+delr                    1.2000E+00
+rvdw                    7.0000E+00
+reaction field
+eps constant            7.8000E+01
+cap                     1.0000E+04
+shake tolerance         1.0000E-05
+quaternion tolerance    1.0000E-05
+print rdf
+job time         172800000.0
+close time       500000.00
+finish

@@ -1,0 +1,23 @@
+#!/bin/sh
+#SBATCH -n 1
+#SBATCH -p cpu-6230R
+#SBATCH --mail-type=BEGIN,END
+#SBATCH -J Si_PMF
+
+
+module load dl-poly/4.09_MahaGaro-intel
+module load python/3.6.10
+
+
+
+#source /softs/_environnement/dl_poly-4.0.6.env
+
+### All calculation parameters go here ###
+###CUWOD_SS4='/home/kd261704/Kamalesh/CEA/pmf_test/70'
+###cd $CUWOD_SS4
+
+python pmf_1_master_glass.py
+python pmf_4_output_analyzer_id.py
+
+exit 0
+

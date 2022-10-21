@@ -1,0 +1,22 @@
+Verre_SiO2
+UNITS eV
+MOLECULES 2
+Silicium
+NUMMOLS 130 
+ATOMS 1
+Si         28.085       0.00d0
+FINISH
+Oxygène
+NUMMOLS 260 
+ATOMS 1
+O          15.999       0.00d0
+FINISH
+VDW 3
+Si Si    tab
+Si O     tab
+O  O     tab
+TBP 2
+Si    O    Si   stwb   6.17978E+00    -3.33331E-01    2.00000E+00    2.00000E+00    2.60000E+00
+O     Si   O    stwb   0.93009E+02    -3.33331E-01    2.80000E+00    2.80000E+00    3.00000E+00
+CLOSE
+
