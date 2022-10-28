@@ -1,0 +1,79 @@
+###########################################################################################################
+# Input lammps: interface SiO2-water
+############################################################################################################
+
+units          real
+dimension      3
+boundary       p p p
+atom_style     charge
+thermo  10
+log hn.data
+
+
+# reading data
+
+read_data input_structure_2.data
+
+#restart   10000 restart_*.lammps
+
+##########mass##########
+mass       1    16.0
+mass       2    1.0
+mass       3    28.0855
+
+group           type1 type 1
+compute         charge1 type1 property/atom q
+compute         q1 type1 reduce ave c_charge1
+
+group           type2 type 2
+compute         charge2 type2 property/atom q
+compute         q2 type2 reduce ave c_charge2
+
+group           type3 type 3
+compute         charge3 type3 property/atom q
+compute         q3 type3 reduce ave c_charge3
+
+
+
+
+##########Force fields######################################################
+pair_style reax/c NULL safezone 1.6 mincap 100
+
+pair_coeff * * ffield_new O H Si 
+
+fix             3 all qeq/reax 1 0.0 10.0 1.0e-6 reax/c
+#############################################################################
+
+
+
+neighbor 0.3 nsq
+neigh_modify every 20 delay 0 check yes
+
+
+###############Thermodynamics and drift######################################
+thermo_style    custom step temp press density vol etotal enthalpy 
+thermo_modify    lost ignore flush yes
+
+
+#####################Minimization stage######################################
+dump         mini all custom 1000 mini.dump id type q x y z ix iy iz #### trajectory for the minimization stage
+timestep 0.1
+min_style fire
+minimize 0 1e-6 10000 10000
+min_modify dmax 0.1
+undump mini
+############################################################################
+
+
+
+###################NVT Step################################################
+
+dump       analysis_nvt all custom 1000 analysis_nvt.dump id type q x y z mass vx vy vz #### Trajectory provides charge and x y z of each atom in your system
+fix        analysis_nvt all nvt temp 363 363 $(100.0*dt)
+timestep   0.1 ### TS in fs
+run        100000  #### Number of TS
+unfix      analysis_nvt
+undump     analysis_nvt
+
+###########################################################################
+
